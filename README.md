@@ -2,6 +2,10 @@
 
 The repo contains multiple small tools that help build a yield prediction pipeline.
 
+Tested on:
+- Windows 11, python 3.10.11
+- Ubuntu 22.04, python 3.10.12
+
 ## Data
 
 The data is expected to be located in the repo folder inside the "data" directory in the following structure:
@@ -37,7 +41,7 @@ Spectral indices used:
 ### Install
 
 - Some modernish version (3.9<) of python is required.
-- If you have CUDA and cuDNN installed then the model will utilize the GPU otherwise it runs on the CPU 
+- If you have CUDA and cuDNN installed then the model will utilize the GPU otherwise it runs on the CPU.
 
 ```shell
 python -m pip install -r requirements.txt
