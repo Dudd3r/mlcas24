@@ -45,7 +45,10 @@ python -m pip install -r requirements.txt
 
 Copy the data into the repo directory as explained above.
 
-### Run data formatting
+### Run data formatting & project setup
+
+The data formatter will create the neccessary project structure and will create
+a number of data views stored as CSVs.
 
 ```shell
 python data_formatter.py
@@ -100,7 +103,7 @@ and save the resulting csv in the results folder.
 
 This repo contains the bare minimum to reproduce the results submitted to the competition. The feature engineering, feature selection, model selection and EDA is scattered accross notebooks and small scripts which I am not comfortable sharing at this moment. 
 
-P.S.: The pipeline could use a good refactoring. :>
+P.S.: The pipeline could use a good refactoring. :>. I will take some time to clean things up a bit.
 
 Cheers,
 Andras
