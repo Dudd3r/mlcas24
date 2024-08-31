@@ -22,11 +22,15 @@ pd.set_option('display.float_format', '{:.4f}'.format)
 pj = os.path.join
 ls = glob.glob
 
+DATA_SET_URL = "https://iastate.app.box.com/index.php?folder_id=271502960797&q%5Bshared_item%5D%5Bshared_name%5D=p8nj1ukvwx3yo7off8y8yspdruc0mjna&rm=box_v2_zip_shared_folder"
+
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA_ROOT = pj(PROJECT_ROOT, "data")
 MODELS_DIR = pj(PROJECT_ROOT, "models")
 RESULTS_DIR = pj(PROJECT_ROOT, "results")
 CACHE_DIR = pj(PROJECT_ROOT, "cache")
+
+DATA_SET_ZIP = pj(DATA_ROOT, "2023.zip")
 
 for dir in [MODELS_DIR, RESULTS_DIR, CACHE_DIR]:
     os.makedirs(dir, exist_ok=1)
@@ -40,9 +44,17 @@ CANONICAL_DATA_CSV = pj(DATA_ROOT, "processed", "canonical.csv")
 SPECTRAL_DATA_CSV = pj(DATA_ROOT, "processed", "spectral_data.csv")
 SPECTRAL_STATS_JSON = pj(PROJECT_ROOT, "spectral_stats.json")
 
-MAX_TP_DIFF = 10
+SUBMISSION_CSV = pj(DATA_ROOT, "test", "2023", "DataPublication_final", "GroundTruth", "test_HIPS_HYBRIDS_2023_V2.3.csv")
 
+MAX_TP_DIFF = 10
 MAX_GROWTH_CYCLE_DAYS = 150
+
+# Model Parameters
+
+RNET_IMAGE_CHANNELS = 9
+RNET_DEFAULT_WEIGHTS = "ResNet18_Weights.IMAGENET1K_V1"
+RNET_TRAIN_EPOCHS = 500
+RNET_BATCH_SIZE = 300
 
 AUG_FLIP = 0.1
 AUG_SHIFT = 0.1

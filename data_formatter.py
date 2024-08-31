@@ -146,6 +146,7 @@ class MLCASDataFormatter:
                             df["row"].astype(str)
 
         self.data = df
+
         print("[INFO] Done.")
 
 def extract_image_parameters(image_path):
@@ -222,6 +223,7 @@ def transform_non_tp():
     cf['rank'] = cf.groupby(['year', 'location'])['yield'].rank(method='average', ascending=False)
     genotype_rank = cf.groupby('genotype')['rank'].sum().rank(method='min')
     canon_data['rank'] = canon_data['genotype'].map(genotype_rank) / len(cf["genotype"].unique())
+
 
     canon_data.to_csv(CANONICAL_DATA_CSV, index=False)
 
@@ -303,9 +305,8 @@ def transform_discrete_tp():
 
     canon_data.to_csv(CANONICAL_DATA_CSV, index=False)
 
-if __name__ == "__main__":
-
-    # some data wrangling    
+def run():
+     # some data wrangling    
     for data_split, filename in {"train": TRAINING_DATA_CSV,
                                  "test": TEST_DATA_CSV}.items():
         print("[INFO] Formatting {} data.".format(data_split))
@@ -315,3 +316,7 @@ if __name__ == "__main__":
     
     # build the canonical data representation
     transform_non_tp()
+
+if __name__ == "__main__":
+    run()
+   

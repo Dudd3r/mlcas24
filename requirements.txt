@@ -7,3 +7,5 @@ scikit-learn
 matplotlib
 torch
 torchvision
+requests
+tqdm

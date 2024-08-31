@@ -1,21 +1,11 @@
 # MLCAS24 - Maize yield prediction using satellite images
 
-The repo contains multiple small tools that help build a yield prediction pipeline.
+The repo contains multiple small tools that help build a maize yield prediction pipeline,
+based on satellite images.
 
 Tested on:
 - Windows 11, python 3.10.11
 - Ubuntu 22.04, python 3.10.12
-
-## Data
-
-The data is expected to be located in the repo folder inside the "data" directory in the following structure:
-
-data/\<dataset>\/\<year>\/
-
-where dataset may be train, validation or test. Under the "year" directory the data is expected to follow the
-MLCAS data standard. (e.g. 
-- data/train/2023/DataPublication_final/GroundTruth/\*.csv
-- data/train/2023/DataPublication_final/Satellite/\<location\>/\<timepoint\>/\*.tif)
 
 ## Approach
 
@@ -48,6 +38,15 @@ python -m pip install -r requirements.txt
 ```
 
 Copy the data into the repo directory as explained above.
+
+### Auto run
+
+The simplest way to run the pipeline is executing the auto run script. It will internally
+run the data downloader, data formatter and will start the model in inference mode.
+
+```shell
+python autorun.py
+```
 
 ### Run data formatting & project setup
 

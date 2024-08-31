@@ -11,12 +11,12 @@ from common import *
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
 class ResNet(nn.Module):
-    def __init__(self, num_channels=9):
+    def __init__(self):
         super(ResNet, self).__init__()
         
-        self.resnet = models.resnet18(weights="ResNet18_Weights.IMAGENET1K_V1")
-        self.resnet.conv1 = nn.Conv2d(num_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
-        self.resnet.fc = nn.Identity()  # Removing the final fully connected layer
+        self.resnet = models.resnet18(weights=RNET_DEFAULT_WEIGHTS)
+        self.resnet.conv1 = nn.Conv2d(RNET_IMAGE_CHANNELS, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.resnet.fc = nn.Identity()
         
         self.float_fc = nn.Sequential(
             nn.Linear(3, 32),
@@ -164,16 +164,19 @@ class MLDataset(Dataset):
 
 def save_model(model, filename):
     torch.save(model.state_dict(), filename)
-    print("Saving model {}.".format(filename))
+    print("[INFO] Saving model {}.".format(filename))
 
 def load_model(model_class, filename):
     model = model_class()
     model.load_state_dict(torch.load(filename))
-    model.eval()  # Set the model to evaluation mode
+    model.eval()
     print("[INFO] Loading weights: {}".format(filename))
     return model
 
 def train_model(model, dataloaders, criterion, optimizer, device, epochs):
+
+    print("[INFO] Training start on device: {}".format(device))
+
     model.train()
     
     for epoch in range(epochs):
@@ -216,14 +219,12 @@ def train_model(model, dataloaders, criterion, optimizer, device, epochs):
 
         val_loss /= len(dataloaders["val"].dataset)
         val_rmse = torch.sqrt(torch.tensor(val_loss))
-        val_mean = torch.mean(output)
 
-        print(f"[{device}] Epoch {epoch+1}/{epochs}, RMSE (train): {rmse:.4f}, RMSE (val): {val_rmse:.4f}, mean: {val_mean:.2f}")
+        print(f"[{device}] [{epoch+1}/{epochs}], RMSE (train): {rmse:.4f}, RMSE (val): {val_rmse:.4f}")
 
 def train(filename, epochs, batch_size):
-    print(filename)
     if os.path.isfile(filename):
-        print("[WARN] Model already exists with the same name: {}".format(filename))
+        print("[WARN] Skip training: model already exists with the same name: {}".format(filename))
         return
 
     canon_data = pd.read_csv(CANONICAL_DATA_CSV)
@@ -280,11 +281,13 @@ def infer(model_file):
     return test_data
 
 def generate_results(prediction, model_id):
-    test_file = pj(DATA_ROOT, "test", "2023", "DataPublication_final", "GroundTruth", "test_HIPS_HYBRIDS_2023_V2.3.csv")
-    tf = pd.read_csv(test_file)
+    tf = pd.read_csv(SUBMISSION_CSV)
+    
+    # Locate the corresponding row
     tf["range"] = tf["range"].astype(int)
     tf["row"] = tf["row"].astype(int)
 
+    # Create columns for the predictions
     for i in range(0, tf.shape[0]):
         tr = tf.iloc[i]
         pr = prediction.loc[(prediction["column"] == tr["range"]) & (prediction["row"] == tr["row"]) & 
@@ -292,19 +295,27 @@ def generate_results(prediction, model_id):
         for j in range(0, pr.shape[0]):
             tf.loc[i, "prediction_{}".format(j+1)] = pr.iloc[j]["prediction"]
 
+    # Set the season bias
     train_data = pd.read_csv(TRAINING_DATA_CSV)
     df = train_data[["year", "location", "genotype", "yield"]]
     df = df.loc[(df["location"] == "MOValley")]
     year_average = df[["year", "yield"]].groupby(by="year").median()
-    year_bias = year_average["yield"].max() - year_average["yield"].min()
+    season_bias = year_average["yield"].max() - year_average["yield"].min()
 
-    tf["yieldPerAcre"] = tf[["prediction_1", "prediction_2", "prediction_3"]].mean(axis=1) + year_bias
-    
+    tf["yieldPerAcre"] = tf[["prediction_1", "prediction_2", "prediction_3"]].mean(axis=1) + season_bias
+
+    # cleanup
     tf = tf.drop(["prediction_{}".format(i) for i in range(1, 4)], axis=1)
 
+    # write out
     result_file = pj(RESULTS_DIR, "{}.csv".format(model_id))
     print("[INFO] Saving results to: {}".format(result_file))
     tf.to_csv(result_file, index=False)
+
+def run(model_id):
+    train(pj(MODELS_DIR,"{}.pth".format(model_id)), RNET_TRAIN_EPOCHS, RNET_BATCH_SIZE)
+    prediction = infer(pj(MODELS_DIR,"{}.pth".format(model_id)))
+    generate_results(prediction, model_id)
 
 if __name__ == "__main__":
 
@@ -313,9 +324,5 @@ if __name__ == "__main__":
         quit()
 
     model_id = str(sys.argv[1]).replace(" ", "")
-    epochs = 500
-    batch_size = 300
-
-    train(pj(MODELS_DIR,"{}.pth".format(model_id)), epochs, batch_size)
-    prediction = infer(pj(MODELS_DIR,"{}.pth".format(model_id)))
-    generate_results(prediction, model_id)
+    run(model_id)
+    
