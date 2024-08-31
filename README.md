@@ -37,35 +37,38 @@ Spectral indices used:
 python -m pip install -r requirements.txt
 ```
 
-Copy the data into the repo directory as explained above.
+### Autorun
 
-### Auto run
-
-The simplest way to run the pipeline is executing the auto run script. It will internally
+The simplest way to run the pipeline is executing the autorun script. It will internally
 run the data downloader, data formatter and will start the model in inference mode.
 
 ```shell
 python autorun.py
 ```
 
-### Run data formatting & project setup
+The autorun pipeline will also load the test CSV and perform the predictions on it. The results are stored under the "results" directory.
+
+### Components
+#### Data formatting & Project Setup
 
 The data formatter will create the neccessary project structure and will create
-a number of data views stored as CSVs.
+a number of data views stored as CSVs. The canonical data format uses the satellite image file names as its primary key.
 
 ```shell
 python data_formatter.py
 ```
 
-### (Optional) Run spectral statistics extraction
+#### (Optional) Spectral Statistics Extraction
+
+The following scrip is used to extract some statistics about the satellite spectra for normalization. The values are stored in the JSON file: spectral_stats.json
 
 The repo already contains the JSON because the extraction takes a while.
-If you want to verify:
+
 ```shell
 python extract_spectral_stats.py
 ```
 
-### (Optional) Reconstruct full images
+#### (Optional) Full Image Reconstruction
 
 A small script exists that creates full UAV and Satellite images from the 
 segmented pieces with yield overlay for visualization and ideation.
@@ -74,7 +77,7 @@ Not needed to reproduce the results in any way.
 python construct_full_images.py
 ```
 
-### Training & Inference
+#### Training & Inference
 
 When run for the first time the script will build cache files of the 
 datasets so retraining will require less time.
@@ -106,7 +109,7 @@ and save the resulting csv in the results folder.
 
 This repo contains the bare minimum to reproduce the results submitted to the competition. The feature engineering, feature selection, model selection and EDA is scattered accross notebooks and small scripts which I am not comfortable sharing at this moment. 
 
-P.S.: The pipeline could use a good refactoring. :>. I will take some time to clean things up a bit.
+If you have any issues running the pipeline or find any bugs don't hesitate to contanct me.
 
 Cheers,
 Andras
@@ -114,6 +117,7 @@ Andras
 ---
 
 **Author:** Andras Toth<br>
+**E-mail:** andras.toth.hun@gmail.com<br>
 **LinkedIn:** https://www.linkedin.com/in/andr%C3%A1s-t%C3%B3th-54b6151aa/<br>
 **Company:** Phenospex B.V.<br>
 **Year:** 2024
