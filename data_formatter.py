@@ -63,10 +63,13 @@ class MLCASDataFormatter:
 
         # Do the same with the collection date files
         if self.collection_date_available:
+
             collection_dates = None
 
             for file in self.collection_date_files:
                 df = pd.read_excel(file)
+                # Fix link to MOValley data
+                df.loc[df["Location"] == "Missouri Valley", "Location"] = "MOValley"
                 collection_dates = df if collection_dates is None else pd.concat((collection_dates, df))
             
             collection_dates = collection_dates.loc[collection_dates["Image"] == "Satellite"]
@@ -74,6 +77,7 @@ class MLCASDataFormatter:
             collection_dates = collection_dates.rename({"time":"timepoint", 
                                                         "Location":"location",
                                                         "Date": "image_collection_date"}, axis=1)
+            collection_dates.loc[collection_dates["location"] == "Missouri Valley", "location"] = "MOValley"
             collection_dates = collection_dates.drop("Image", axis=1)
 
         # Create a frame from the satellite image filenames
