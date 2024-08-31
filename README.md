@@ -5,7 +5,8 @@ based on satellite images.
 
 Tested on:
 - Windows 11, python 3.10.11
-- Ubuntu 22.04, python 3.10.12
+
+There are some issues when running on Linux.
 
 ## Approach
 
