@@ -72,7 +72,6 @@ def run():
         while overwrite not in ["y", "n"]:
             overwrite = input("[INPUT] Overwrite (y/n)?")
         if overwrite == "n": 
-            extract_data()
             return
 
     download_data(url, DATA_SET_ZIP)

@@ -7,12 +7,15 @@ import colorsys
 import rasterio
 import cv2
 import random
+import warnings
 
 import numpy as np
 import pandas as pd
 from scipy.spatial.distance import cdist
 
 from matplotlib import pyplot as plt
+
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)

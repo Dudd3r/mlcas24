@@ -84,7 +84,7 @@ class MLCASDataFormatter:
         # filename pattern: location-timepoint-experiment_id-range-row.tif
         df = pd.DataFrame({"image_path": self.satellite_image_files})
         df["filename"] = df["image_path"].apply(os.path.basename)
-        df["year"] = df["image_path"].apply(lambda x: re.search(r'\\(\d{4})\\', x).group(1))
+        df["year"] = df["image_path"].apply(lambda x: re.search(r'[\\/](\d{4})[\\/]', x).group(1))
         df["location"] = df["filename"].apply(lambda x: x.split("-")[0])
         df["timepoint"] = df["filename"].apply(lambda x: x.split("-")[1])
         df["experiment"] = df["filename"].apply(lambda x: x.split("-")[2].split("_")[0])

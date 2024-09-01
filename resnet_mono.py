@@ -168,7 +168,10 @@ def save_model(model, filename):
 
 def load_model(model_class, filename):
     model = model_class()
-    model.load_state_dict(torch.load(filename))
+    if str(device).strip() == "cpu":
+        model.load_state_dict(torch.load(filename, map_location='cpu'))
+    else:
+        model.load_state_dict(torch.load(filename))
     model.eval()
     print("[INFO] Loading weights: {}".format(filename))
     return model
@@ -313,6 +316,7 @@ def generate_results(prediction, model_id):
     tf.to_csv(result_file, index=False)
 
 def run(model_id):
+    print("[INFO] Using device: {}".format(device))
     train(pj(MODELS_DIR,"{}.pth".format(model_id)), RNET_TRAIN_EPOCHS, RNET_BATCH_SIZE)
     prediction = infer(pj(MODELS_DIR,"{}.pth".format(model_id)))
     generate_results(prediction, model_id)
