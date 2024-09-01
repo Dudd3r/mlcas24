@@ -4,7 +4,8 @@ The repo contains multiple small tools that help build a maize yield prediction 
 based on satellite images.
 
 Tested on:
-- Windows 11, python 3.10.11
+- Windows 11, python 3.10.11 CUDA11.8, 3.12.5 CPU
+- Ubuntu 22.04, python 3.10.12
 
 There are some issues when running on Linux.
 
