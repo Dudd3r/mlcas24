@@ -7,7 +7,8 @@ Tested on:
 - Windows 11, python 3.10.11 CUDA11.8, 3.12.5 CPU
 - Ubuntu 22.04, python 3.10.12
 
-There are some issues when running on Linux.
+Recommended environment:
+- Windows11, python 3.10.11, CUDA11.8, pandas==2.0.3, torch==2.1.0, torchvision==0.16.0 
 
 ## Approach
 
