@@ -16,11 +16,11 @@ To be written. (Technical documentation of the pipeline).
 
 In a nutshell: 
 - A custom, shallow ResNet that combines the raw image features 
-with some predictors, is used to forecast on the plot level.
+with some predictors that is used to forecast on the plot level.
 
 Predictors:
-- Normalized genotype ranking (based on the traning data)
-- Small environment bias based on the yearly yield differences (based on the training data)
+- Normalized genotype ranking
+- Seasonal bias
 - Normalized time interval between planting date and image collection date
 - Nitrogen amount
 
@@ -29,11 +29,13 @@ Spectral indices used:
 - GLI
 - Hue
 
+No external datasets were used.
+
 ## How to reproduce
 
 ### Install
 
-- Some modernish version (3.9<) of python is required.
+- Python install (>3.9) is required.
 - If you have CUDA and cuDNN installed then the model will utilize the GPU otherwise it runs on the CPU.
 
 ```shell
@@ -52,6 +54,16 @@ python autorun.py
 The autorun pipeline will also load the test CSV and perform the predictions on it. The results are stored under the "results" directory.
 
 ### Components
+
+#### Data downloader
+
+The data downloader, apart from acquiring the data, extracts the files and reformats the structure so that it is compatible
+with the pipeline.
+
+```shell
+python data_downloader.py
+```
+
 #### Data formatting & Project Setup
 
 The data formatter will create the neccessary project structure and will create
