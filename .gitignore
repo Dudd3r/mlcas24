@@ -1,5 +1,4 @@
 # Project specific
-data/*
 full_images/*
 cache/*train*
 cache/*val*

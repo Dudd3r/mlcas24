@@ -47,7 +47,7 @@ CANONICAL_DATA_CSV = pj(DATA_ROOT, "processed", "canonical.csv")
 SPECTRAL_DATA_CSV = pj(DATA_ROOT, "processed", "spectral_data.csv")
 SPECTRAL_STATS_JSON = pj(PROJECT_ROOT, "spectral_stats.json")
 
-SUBMISSION_CSV = pj(DATA_ROOT, "test", "2023", "DataPublication_final", "GroundTruth", "test_HIPS_HYBRIDS_2023_V2.3.csv")
+SUBMISSION_CSV = pj(DATA_ROOT, "processed", "test_HIPS_HYBRIDS_2023_V2.3.csv")
 
 MAX_TP_DIFF = 10
 MAX_GROWTH_CYCLE_DAYS = 150
